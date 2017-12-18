@@ -1,8 +1,18 @@
-﻿Public Class FrmArtyCalculator
+﻿Imports System.IO
+Public Class FrmArtyCalculator
     'Made by [CBM]Merskies
     '11/17/2017
+    Structure TargetData
+        Dim Index As String
+        Dim Distance As String
+        Dim Azimuth As String
+        Dim TargetName As String
+    End Structure
+
+    Public Targets() As TargetData
     Public Min, Max As Integer
     Public NameofArty As String
+    Public FileName As String = "Targets.txt"
     Public Class Artillery
         Public Property Name As String
         Public Property MinRange As Integer
@@ -89,6 +99,8 @@
             'Output
             If (OrderDistance >= Min And OrderDistance <= Max) Then
                 txtOutput.Text = "Order Distance " & OrderDistance & ", Azimuth " & OrderAzimuth
+                btnSave.Enabled = True
+                BtnDisplay.Enabled = True
             ElseIf (OrderDistance < Min) Then
                 txtOutput.Text = "Distance is " & Math.Abs(Min - OrderDistance) & "(M) too short for the " & NameofArty & "!"
             Else txtOutput.Text = "Distance is " & Math.Abs(Max - OrderDistance) & "(M) too far for the " & NameofArty & "!"
@@ -96,5 +108,44 @@
         Catch
             txtOutput.Text = "Not Enough Data!"
         End Try
+    End Sub
+
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+
+    End Sub
+
+    Private Sub BtnDisplay_Click(sender As Object, e As EventArgs) Handles BtnDisplay.Click
+        Dim TargetQuery = From Target In Targets
+                          Order By Target.Index Ascending
+                          Select Target.Index, Target.Distance, Target.Azimuth, Target.TargetName
+        dgvSaves.DataSource = TargetQuery.ToList
+        dgvSaves.CurrentCell = Nothing
+        dgvSaves.Columns("TargetName").HeaderText = "Target Name"
+        dgvSaves.Columns("Distance").HeaderText = "Distance"
+        dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
+        dgvSaves.RowHeadersVisible = False
+    End Sub
+
+    Private Sub LoadForm() Handles Me.Load
+        If (File.Exists(FileName)) Then
+            LoadTargets()
+        Else
+            File.Create(FileName)
+        End If
+        BtnDisplay.Enabled = True
+    End Sub
+    Private Sub LoadTargets()
+        Dim Line As String
+        Dim Data(2) As String
+        Dim Target() As String = File.ReadAllLines("Targets.txt")
+        ReDim Preserve Targets(Target.Count - 1)
+        For i As Integer = 0 To Target.Count - 1
+            Line = Target(i)
+            Data = Line.Split(","c)
+            Targets(i).Index = i
+            Targets(i).Distance = Data(0)
+            Targets(i).Azimuth = Data(1)
+            Targets(i).TargetName = Data(2)
+        Next
     End Sub
 End Class

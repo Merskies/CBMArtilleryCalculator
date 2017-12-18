@@ -48,6 +48,10 @@ Partial Class FrmArtyCalculator
         Me.cbTargetAzimuth = New System.Windows.Forms.CheckBox()
         Me.cbDistancetoTarget = New System.Windows.Forms.CheckBox()
         Me.dgvSaves = New System.Windows.Forms.DataGridView()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.BtnDisplay = New System.Windows.Forms.Button()
+        Me.btnUpdate = New System.Windows.Forms.Button()
+        Me.BtnDelete = New System.Windows.Forms.Button()
         Me.grpBoxArty.SuspendLayout()
         Me.grpBoxLock.SuspendLayout()
         CType(Me.dgvSaves, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -303,14 +307,58 @@ Partial Class FrmArtyCalculator
         Me.dgvSaves.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvSaves.Location = New System.Drawing.Point(565, 66)
         Me.dgvSaves.Name = "dgvSaves"
-        Me.dgvSaves.Size = New System.Drawing.Size(323, 225)
+        Me.dgvSaves.Size = New System.Drawing.Size(323, 193)
         Me.dgvSaves.TabIndex = 10000
+        '
+        'btnSave
+        '
+        Me.btnSave.Enabled = False
+        Me.btnSave.Location = New System.Drawing.Point(567, 268)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(75, 23)
+        Me.btnSave.TabIndex = 10001
+        Me.btnSave.Text = "Save"
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
+        'BtnDisplay
+        '
+        Me.BtnDisplay.Enabled = False
+        Me.BtnDisplay.Location = New System.Drawing.Point(648, 268)
+        Me.BtnDisplay.Name = "BtnDisplay"
+        Me.BtnDisplay.Size = New System.Drawing.Size(75, 23)
+        Me.BtnDisplay.TabIndex = 10002
+        Me.BtnDisplay.Text = "Display"
+        Me.BtnDisplay.UseVisualStyleBackColor = True
+        '
+        'btnUpdate
+        '
+        Me.btnUpdate.Enabled = False
+        Me.btnUpdate.Location = New System.Drawing.Point(729, 268)
+        Me.btnUpdate.Name = "btnUpdate"
+        Me.btnUpdate.Size = New System.Drawing.Size(75, 23)
+        Me.btnUpdate.TabIndex = 10002
+        Me.btnUpdate.Text = "Update"
+        Me.btnUpdate.UseVisualStyleBackColor = True
+        '
+        'BtnDelete
+        '
+        Me.BtnDelete.Enabled = False
+        Me.BtnDelete.Location = New System.Drawing.Point(810, 268)
+        Me.BtnDelete.Name = "BtnDelete"
+        Me.BtnDelete.Size = New System.Drawing.Size(75, 23)
+        Me.BtnDelete.TabIndex = 10002
+        Me.BtnDelete.Text = "Delete"
+        Me.BtnDelete.UseVisualStyleBackColor = True
         '
         'FrmArtyCalculator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(900, 389)
+        Me.Controls.Add(Me.BtnDelete)
+        Me.Controls.Add(Me.btnUpdate)
+        Me.Controls.Add(Me.BtnDisplay)
+        Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.dgvSaves)
         Me.Controls.Add(Me.grpBoxLock)
         Me.Controls.Add(Me.grpBoxArty)
@@ -365,4 +413,8 @@ Partial Class FrmArtyCalculator
     Friend WithEvents cbDistancetoArty As CheckBox
     Friend WithEvents cbTargetAzimuth As CheckBox
     Friend WithEvents dgvSaves As DataGridView
+    Friend WithEvents btnSave As Button
+    Friend WithEvents BtnDisplay As Button
+    Friend WithEvents btnUpdate As Button
+    Friend WithEvents BtnDelete As Button
 End Class
