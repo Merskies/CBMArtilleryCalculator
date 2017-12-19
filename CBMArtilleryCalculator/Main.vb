@@ -13,6 +13,7 @@ Public Class FrmArtyCalculator
     Public Min, Max As Integer
     Public NameofArty As String
     Public FileName As String = "Targets.txt"
+
     Public Class Artillery
         Public Property Name As String
         Public Property MinRange As Integer
@@ -23,7 +24,9 @@ Public Class FrmArtyCalculator
             Me.MaxRange = Max
         End Sub
     End Class
+
     Private ArtilleryMap As New Dictionary(Of RadioButton, Artillery)
+
     Private Sub ArtyCalculator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ArtilleryMap.Add(rBtnMortar, New Artillery("Mortar", 45, 65))
         ArtilleryMap.Add(rBtnHowitzer, New Artillery("Howitzer", 75, 150))
@@ -31,6 +34,7 @@ Public Class FrmArtyCalculator
         ArtilleryMap.Add(rBtnGunBoat, New Artillery("Gun Boat", 50, 100))
         ArtilleryMap.Add(rBtnTank, New Artillery("Tank", 1, 40))
     End Sub
+
     Private Sub Artillery_CheckedChanged(sender As Object, e As EventArgs) Handles rBtnMortar.CheckedChanged, rBtnHowitzer.CheckedChanged, rBtnFieldArtillery.CheckedChanged, rBtnGunBoat.CheckedChanged, rBtnTank.CheckedChanged
 
         Dim radio As RadioButton = TryCast(sender, RadioButton)
@@ -116,8 +120,8 @@ Public Class FrmArtyCalculator
 
     Private Sub BtnDisplay_Click(sender As Object, e As EventArgs) Handles BtnDisplay.Click
         Dim TargetQuery = From Target In Targets
-                          Order By Target.Index Ascending
-                          Select Target.Index, Target.Distance, Target.Azimuth, Target.TargetName
+                          Where Target.Index <> ""
+                          Select Target.TargetName, Target.Distance, Target.Azimuth
         dgvSaves.DataSource = TargetQuery.ToList
         dgvSaves.CurrentCell = Nothing
         dgvSaves.Columns("TargetName").HeaderText = "Target Name"
@@ -134,6 +138,7 @@ Public Class FrmArtyCalculator
         End If
         BtnDisplay.Enabled = True
     End Sub
+
     Private Sub LoadTargets()
         Dim Line As String
         Dim Data(2) As String
@@ -143,9 +148,10 @@ Public Class FrmArtyCalculator
             Line = Target(i)
             Data = Line.Split(","c)
             Targets(i).Index = i
-            Targets(i).Distance = Data(0)
-            Targets(i).Azimuth = Data(1)
-            Targets(i).TargetName = Data(2)
+            Targets(i).TargetName = Data(0)
+            Targets(i).Distance = Data(1)
+            Targets(i).Azimuth = Data(2)
+
         Next
     End Sub
 End Class
