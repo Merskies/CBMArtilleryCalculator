@@ -52,6 +52,10 @@ Partial Class FrmArtyCalculator
         Me.BtnDisplay = New System.Windows.Forms.Button()
         Me.btnUpdate = New System.Windows.Forms.Button()
         Me.BtnDelete = New System.Windows.Forms.Button()
+        Me.txtDistance = New System.Windows.Forms.TextBox()
+        Me.txtAzimuth = New System.Windows.Forms.TextBox()
+        Me.lblTargetIndex = New System.Windows.Forms.Label()
+        Me.lblTargetName = New System.Windows.Forms.Label()
         Me.grpBoxArty.SuspendLayout()
         Me.grpBoxLock.SuspendLayout()
         CType(Me.dgvSaves, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -350,11 +354,57 @@ Partial Class FrmArtyCalculator
         Me.BtnDelete.Text = "Delete"
         Me.BtnDelete.UseVisualStyleBackColor = True
         '
+        'txtDistance
+        '
+        Me.txtDistance.Enabled = False
+        Me.txtDistance.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtDistance.Location = New System.Drawing.Point(158, 292)
+        Me.txtDistance.Name = "txtDistance"
+        Me.txtDistance.ReadOnly = True
+        Me.txtDistance.Size = New System.Drawing.Size(194, 26)
+        Me.txtDistance.TabIndex = 3
+        Me.txtDistance.TabStop = False
+        Me.txtDistance.Visible = False
+        '
+        'txtAzimuth
+        '
+        Me.txtAzimuth.Enabled = False
+        Me.txtAzimuth.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtAzimuth.Location = New System.Drawing.Point(358, 292)
+        Me.txtAzimuth.Name = "txtAzimuth"
+        Me.txtAzimuth.ReadOnly = True
+        Me.txtAzimuth.Size = New System.Drawing.Size(194, 26)
+        Me.txtAzimuth.TabIndex = 3
+        Me.txtAzimuth.TabStop = False
+        Me.txtAzimuth.Visible = False
+        '
+        'lblTargetIndex
+        '
+        Me.lblTargetIndex.AutoSize = True
+        Me.lblTargetIndex.Location = New System.Drawing.Point(564, 305)
+        Me.lblTargetIndex.Name = "lblTargetIndex"
+        Me.lblTargetIndex.Size = New System.Drawing.Size(101, 13)
+        Me.lblTargetIndex.TabIndex = 10003
+        Me.lblTargetIndex.Text = "TargetIndexNumber"
+        Me.lblTargetIndex.Visible = False
+        '
+        'lblTargetName
+        '
+        Me.lblTargetName.AutoSize = True
+        Me.lblTargetName.Location = New System.Drawing.Point(671, 305)
+        Me.lblTargetName.Name = "lblTargetName"
+        Me.lblTargetName.Size = New System.Drawing.Size(66, 13)
+        Me.lblTargetName.TabIndex = 10003
+        Me.lblTargetName.Text = "TargetName"
+        Me.lblTargetName.Visible = False
+        '
         'FrmArtyCalculator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(900, 389)
+        Me.Controls.Add(Me.lblTargetName)
+        Me.Controls.Add(Me.lblTargetIndex)
         Me.Controls.Add(Me.BtnDelete)
         Me.Controls.Add(Me.btnUpdate)
         Me.Controls.Add(Me.BtnDisplay)
@@ -364,7 +414,9 @@ Partial Class FrmArtyCalculator
         Me.Controls.Add(Me.grpBoxArty)
         Me.Controls.Add(Me.btnCalculate)
         Me.Controls.Add(Me.txtOutput)
+        Me.Controls.Add(Me.txtAzimuth)
         Me.Controls.Add(Me.txtMaximum)
+        Me.Controls.Add(Me.txtDistance)
         Me.Controls.Add(Me.txtMinimum)
         Me.Controls.Add(Me.txtArtyAzimuth)
         Me.Controls.Add(Me.txtDistancetoArty)
@@ -417,4 +469,8 @@ Partial Class FrmArtyCalculator
     Friend WithEvents BtnDisplay As Button
     Friend WithEvents btnUpdate As Button
     Friend WithEvents BtnDelete As Button
+    Friend WithEvents txtDistance As TextBox
+    Friend WithEvents txtAzimuth As TextBox
+    Friend WithEvents lblTargetIndex As Label
+    Friend WithEvents lblTargetName As Label
 End Class

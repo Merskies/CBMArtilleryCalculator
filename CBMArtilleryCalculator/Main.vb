@@ -101,6 +101,8 @@ Public Class FrmArtyCalculator
             OrderDistance = Math.Round(DistancefromArtytoTarget)
             OrderAzimuth = FinalAzimuth
             'Output
+            txtDistance.Text = OrderDistance
+            txtAzimuth.Text = OrderAzimuth
             If (OrderDistance >= Min And OrderDistance <= Max) Then
                 txtOutput.Text = "Order Distance " & OrderDistance & ", Azimuth " & OrderAzimuth
                 btnSave.Enabled = True
@@ -114,20 +116,36 @@ Public Class FrmArtyCalculator
         End Try
     End Sub
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-
+    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
+        Dim UpdatedData As String = ""
+        For Each TG In Targets
+                TG.Index = lblTargetIndex.Text
+                TG.TargetName = lblTargetname.Text
+                TG.Distance = txtDistance.Text
+                TG.Azimuth = txtAzimuth.Text
+                With TG
+                    UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
+                End With
+            Next
+            File.WriteAllText(FileName, UpdatedData)
+            MessageBox.Show("Target Added.", "Added")
+        ClearAllTextBoxes()
     End Sub
 
     Private Sub BtnDisplay_Click(sender As Object, e As EventArgs) Handles BtnDisplay.Click
+        LoadTargets()
         Dim TargetQuery = From Target In Targets
                           Where Target.Index <> ""
-                          Select Target.TargetName, Target.Distance, Target.Azimuth
+                          Select Target.Index, Target.TargetName, Target.Distance, Target.Azimuth
         dgvSaves.DataSource = TargetQuery.ToList
         dgvSaves.CurrentCell = Nothing
+        dgvSaves.Columns("Index").HeaderText = "#"
         dgvSaves.Columns("TargetName").HeaderText = "Target Name"
         dgvSaves.Columns("Distance").HeaderText = "Distance"
         dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
         dgvSaves.RowHeadersVisible = False
+        dgvSaves.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+        btnUpdate.Enabled = True
     End Sub
 
     Private Sub LoadForm() Handles Me.Load
@@ -152,6 +170,41 @@ Public Class FrmArtyCalculator
             Targets(i).Distance = Data(1)
             Targets(i).Azimuth = Data(2)
 
+        Next
+    End Sub
+
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        If txtOutput.Text = "" Or txtOutput.Text = "Not Enough Data!" Then
+            MsgBox("You have not yet calculated your order to save!")
+        Else
+            Dim lineCount = File.ReadAllLines("Targets.txt").Length
+            Dim IndexNumber, Name, Distance, Azimuth, OutputLine As String
+            If txtOutput.Text = "" Or txtOutput.Text = "Not Enough Data!" Then
+            Else
+                IndexNumber = lineCount + 1
+                lblTargetIndex.Text = IndexNumber
+                Name = InputBox("Please give your target a name", "Name Your Target", "Name of Target")
+                Distance = txtDistance.Text
+                Azimuth = txtAzimuth.Text
+
+                OutputLine = IndexNumber & ", " & Name & ", " & Distance & ", " & Azimuth
+
+                Dim sw As StreamWriter = IO.File.AppendText("Targets.txt")
+                sw.WriteLine(OutputLine)
+                sw.Close()
+                MessageBox.Show(Name & " added to file.", "Name Added")
+                ClearAllTextBoxes()
+                txtDistancetoTarget.Focus()
+            End If
+        End If
+    End Sub
+
+    Private Sub ClearAllTextBoxes() 'Clears all textboxes
+        Dim clear As Control
+        For Each clear In Me.Controls
+            If TypeOf clear Is TextBox Then
+                clear.Text = Nothing
+            End If
         Next
     End Sub
 End Class
