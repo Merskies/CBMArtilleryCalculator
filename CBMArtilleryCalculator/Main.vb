@@ -9,7 +9,7 @@ Public Class FrmArtyCalculator
         Dim TargetName As String
     End Structure
 
-    Public Targets() As TargetData
+    Public TargetArray() As TargetData
     Public Min, Max As Integer
     Public NameofArty As String
     Public FileName As String = "Targets.txt"
@@ -27,7 +27,7 @@ Public Class FrmArtyCalculator
 
     Private ArtilleryMap As New Dictionary(Of RadioButton, Artillery)
 
-    Private Sub ArtyCalculator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub CalculatorLoad(sender As Object, e As EventArgs) Handles MyBase.Load
         ArtilleryMap.Add(rBtnMortar, New Artillery("Mortar", 45, 65))
         ArtilleryMap.Add(rBtnHowitzer, New Artillery("Howitzer", 75, 150))
         ArtilleryMap.Add(rBtnFieldArtillery, New Artillery("Field Artillery", 75, 150))
@@ -35,7 +35,7 @@ Public Class FrmArtyCalculator
         ArtilleryMap.Add(rBtnTank, New Artillery("Tank", 1, 40))
     End Sub
 
-    Private Sub Artillery_CheckedChanged(sender As Object, e As EventArgs) Handles rBtnMortar.CheckedChanged, rBtnHowitzer.CheckedChanged, rBtnFieldArtillery.CheckedChanged, rBtnGunBoat.CheckedChanged, rBtnTank.CheckedChanged
+    Private Sub ArtyCheckedChanged(sender As Object, e As EventArgs) Handles rBtnMortar.CheckedChanged, rBtnHowitzer.CheckedChanged, rBtnFieldArtillery.CheckedChanged, rBtnGunBoat.CheckedChanged, rBtnTank.CheckedChanged
 
         Dim radio As RadioButton = TryCast(sender, RadioButton)
         If radio Is Nothing OrElse Not ArtilleryMap.ContainsKey(radio) Then Return
@@ -49,14 +49,14 @@ Public Class FrmArtyCalculator
         txtMaximum.Text = "Maximum Distance: " & art.MaxRange
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles cbDistancetoTarget.CheckedChanged, cbArtyAzimuth.CheckedChanged, cbDistancetoArty.CheckedChanged, cbTargetAzimuth.CheckedChanged
+    Private Sub LockCheckedChanged(sender As Object, e As EventArgs) Handles cbDistancetoTarget.CheckedChanged, cbArtyAzimuth.CheckedChanged, cbDistancetoArty.CheckedChanged, cbTargetAzimuth.CheckedChanged
         txtDistancetoTarget.Enabled = cbDistancetoTarget.Checked = False
         txtDistancetoArty.Enabled = cbDistancetoArty.Checked = False
         txtTargetAzimuth.Enabled = cbTargetAzimuth.Checked = False
         txtArtyAzimuth.Enabled = cbArtyAzimuth.Checked = False
     End Sub
 
-    Private Sub btnCalculate_Click(sender As Object, e As EventArgs) Handles btnCalculate.Click
+    Private Sub Calculate(sender As Object, e As EventArgs) Handles btnCalculate.Click
         Dim DistancetoTarget, TargetAzimuth, DistancetoArty, ArtyAzimuth As Double
         Dim AngleofSpotter, AngleofSpotterinRads, DistancefromArtytoTarget, SinofRads, DegreeofArtyinRads, DegreeofArtyinDegrees, RoundedDegree, RawAzimuth, FinalAzimuth As Double
         Dim OrderDistance, OrderAzimuth As Double
@@ -101,12 +101,14 @@ Public Class FrmArtyCalculator
             OrderDistance = Math.Round(DistancefromArtytoTarget)
             OrderAzimuth = FinalAzimuth
             'Output
-            txtDistance.Text = OrderDistance
-            txtAzimuth.Text = OrderAzimuth
+            lblDistance.Text = OrderDistance
+            lblAzimuth.Text = OrderAzimuth
             If (OrderDistance >= Min And OrderDistance <= Max) Then
                 txtOutput.Text = "Order Distance " & OrderDistance & ", Azimuth " & OrderAzimuth
                 btnSave.Enabled = True
                 BtnDisplay.Enabled = True
+                btnUpdate.Enabled = True
+                Call Display()
             ElseIf (OrderDistance < Min) Then
                 txtOutput.Text = "Distance is " & Math.Abs(Min - OrderDistance) & "(M) too short for the " & NameofArty & "!"
             Else txtOutput.Text = "Distance is " & Math.Abs(Max - OrderDistance) & "(M) too far for the " & NameofArty & "!"
@@ -116,64 +118,7 @@ Public Class FrmArtyCalculator
         End Try
     End Sub
 
-    Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
-        Dim UpdatedData As String = ""
-        For Each TG In Targets
-                TG.Index = lblTargetIndex.Text
-                TG.TargetName = lblTargetname.Text
-                TG.Distance = txtDistance.Text
-                TG.Azimuth = txtAzimuth.Text
-                With TG
-                    UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
-                End With
-            Next
-            File.WriteAllText(FileName, UpdatedData)
-            MessageBox.Show("Target Added.", "Added")
-        ClearAllTextBoxes()
-    End Sub
-
-    Private Sub BtnDisplay_Click(sender As Object, e As EventArgs) Handles BtnDisplay.Click
-        LoadTargets()
-        Dim TargetQuery = From Target In Targets
-                          Where Target.Index <> ""
-                          Select Target.Index, Target.TargetName, Target.Distance, Target.Azimuth
-        dgvSaves.DataSource = TargetQuery.ToList
-        dgvSaves.CurrentCell = Nothing
-        dgvSaves.Columns("Index").HeaderText = "#"
-        dgvSaves.Columns("TargetName").HeaderText = "Target Name"
-        dgvSaves.Columns("Distance").HeaderText = "Distance"
-        dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
-        dgvSaves.RowHeadersVisible = False
-        dgvSaves.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
-        btnUpdate.Enabled = True
-    End Sub
-
-    Private Sub LoadForm() Handles Me.Load
-        If (File.Exists(FileName)) Then
-            LoadTargets()
-        Else
-            File.Create(FileName)
-        End If
-        BtnDisplay.Enabled = True
-    End Sub
-
-    Private Sub LoadTargets()
-        Dim Line As String
-        Dim Data(2) As String
-        Dim Target() As String = File.ReadAllLines("Targets.txt")
-        ReDim Preserve Targets(Target.Count - 1)
-        For i As Integer = 0 To Target.Count - 1
-            Line = Target(i)
-            Data = Line.Split(","c)
-            Targets(i).Index = i
-            Targets(i).TargetName = Data(0)
-            Targets(i).Distance = Data(1)
-            Targets(i).Azimuth = Data(2)
-
-        Next
-    End Sub
-
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+    Private Sub Save() Handles btnSave.Click
         If txtOutput.Text = "" Or txtOutput.Text = "Not Enough Data!" Then
             MsgBox("You have not yet calculated your order to save!")
         Else
@@ -184,8 +129,8 @@ Public Class FrmArtyCalculator
                 IndexNumber = lineCount + 1
                 lblTargetIndex.Text = IndexNumber
                 Name = InputBox("Please give your target a name", "Name Your Target", "Name of Target")
-                Distance = txtDistance.Text
-                Azimuth = txtAzimuth.Text
+                Distance = lblDistance.Text
+                Azimuth = lblAzimuth.Text
 
                 OutputLine = IndexNumber & ", " & Name & ", " & Distance & ", " & Azimuth
 
@@ -193,18 +138,91 @@ Public Class FrmArtyCalculator
                 sw.WriteLine(OutputLine)
                 sw.Close()
                 MessageBox.Show(Name & " added to file.", "Name Added")
-                ClearAllTextBoxes()
+                ClearTextBoxes()
                 txtDistancetoTarget.Focus()
+                Display()
             End If
         End If
+        btnUpdate.Enabled = False
     End Sub
 
-    Private Sub ClearAllTextBoxes() 'Clears all textboxes
-        Dim clear As Control
-        For Each clear In Me.Controls
-            If TypeOf clear Is TextBox Then
-                clear.Text = Nothing
+    Private Sub Display() Handles BtnDisplay.Click
+        LoadTargets()
+        Dim TargetQuery = From Target In TargetArray
+                          Where Target.Index <> ""
+                          Select Target.Index, Target.TargetName, Target.Distance, Target.Azimuth
+        dgvSaves.DataSource = TargetQuery.ToList
+        dgvSaves.CurrentCell = Nothing
+        dgvSaves.Columns("Index").HeaderText = "#"
+        dgvSaves.Columns("TargetName").HeaderText = "Target Name"
+        dgvSaves.Columns("Distance").HeaderText = "Distance"
+        dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
+        dgvSaves.RowHeadersVisible = False
+        dgvSaves.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+    End Sub
+
+    Private Sub UpdateData() Handles btnUpdate.Click
+        Dim SearchNumber As String
+        SearchNumber = InputBox("Please enter the Targets index number to update", "ID Search")
+        Dim SearchQuery = From Search In TargetArray
+                          Order By Search.Index Ascending
+                          Let SearchID = Search.Index
+                          Where SearchID = SearchNumber
+                          Select Search.Index, Search.TargetName, Search.Distance, Search.Azimuth
+        If (SearchQuery.Count <> 0) Then
+            Dim DBTarget = SearchQuery.First
+            lblTargetIndex.Text = DBTarget.Index
+        End If
+        Dim TargetID As String
+        TargetID = lblTargetIndex.Text
+        Dim UpdatedData As String = ""
+        For Each TG In TargetArray
+            If TargetID = TG.Index Then
+                TG.TargetName = InputBox("Updated Target Name", "Target Name", lblTargetName.Text)
+                TG.Distance = InputBox("Updated Distance", "Distance", lblDistance.Text)
+                TG.Azimuth = InputBox("Updated Azimuth", "Azimuth", lblAzimuth.Text)
             End If
+            With TG
+                UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
+            End With
         Next
+        File.WriteAllText(FileName, UpdatedData)
+        MessageBox.Show("Target Added.", "Added")
+        ClearTextBoxes()
+        Display()
+    End Sub
+
+    Private Sub LoadForm(sender As Object, e As EventArgs) Handles Me.Load
+        If (File.Exists(FileName)) Then
+            LoadTargets()
+        Else
+            File.Create(FileName)
+        End If
+        rBtnHowitzer.Checked = True
+        BtnDisplay.Enabled = True
+    End Sub
+
+    Private Sub LoadTargets()
+        Dim Line As String
+        Dim Data(2) As String
+        Dim Target() As String = File.ReadAllLines("Targets.txt")
+        ReDim Preserve TargetArray(Target.Count - 1)
+        For i As Integer = 0 To Target.Count - 1
+            Line = Target(i)
+            Data = Line.Split(","c)
+            TargetArray(i).Index = Data(0)
+            TargetArray(i).TargetName = Data(1)
+            TargetArray(i).Distance = Data(2)
+            TargetArray(i).Azimuth = Data(3)
+
+        Next
+    End Sub
+
+    Private Sub ClearTextBoxes() 'Clears all textboxes
+        txtDistancetoTarget.Text = ""
+        txtTargetAzimuth.Text = ""
+        txtDistancetoArty.Text = ""
+        txtArtyAzimuth.Text = ""
+        txtOutput.Text = ""
     End Sub
 End Class

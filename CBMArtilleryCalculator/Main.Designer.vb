@@ -52,10 +52,10 @@ Partial Class FrmArtyCalculator
         Me.BtnDisplay = New System.Windows.Forms.Button()
         Me.btnUpdate = New System.Windows.Forms.Button()
         Me.BtnDelete = New System.Windows.Forms.Button()
-        Me.txtDistance = New System.Windows.Forms.TextBox()
-        Me.txtAzimuth = New System.Windows.Forms.TextBox()
         Me.lblTargetIndex = New System.Windows.Forms.Label()
         Me.lblTargetName = New System.Windows.Forms.Label()
+        Me.lblAzimuth = New System.Windows.Forms.Label()
+        Me.lblDistance = New System.Windows.Forms.Label()
         Me.grpBoxArty.SuspendLayout()
         Me.grpBoxLock.SuspendLayout()
         CType(Me.dgvSaves, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -161,7 +161,7 @@ Partial Class FrmArtyCalculator
         Me.rBtnHowitzer.Location = New System.Drawing.Point(6, 49)
         Me.rBtnHowitzer.Name = "rBtnHowitzer"
         Me.rBtnHowitzer.Size = New System.Drawing.Size(89, 24)
-        Me.rBtnHowitzer.TabIndex = 5
+        Me.rBtnHowitzer.TabIndex = 9999
         Me.rBtnHowitzer.Text = "Howitzer"
         Me.rBtnHowitzer.UseVisualStyleBackColor = True
         '
@@ -172,7 +172,7 @@ Partial Class FrmArtyCalculator
         Me.rBtnFieldArtillery.Location = New System.Drawing.Point(6, 79)
         Me.rBtnFieldArtillery.Name = "rBtnFieldArtillery"
         Me.rBtnFieldArtillery.Size = New System.Drawing.Size(116, 24)
-        Me.rBtnFieldArtillery.TabIndex = 5
+        Me.rBtnFieldArtillery.TabIndex = 9999
         Me.rBtnFieldArtillery.Text = "Field Artillery"
         Me.rBtnFieldArtillery.UseVisualStyleBackColor = True
         '
@@ -183,7 +183,7 @@ Partial Class FrmArtyCalculator
         Me.rBtnGunBoat.Location = New System.Drawing.Point(6, 109)
         Me.rBtnGunBoat.Name = "rBtnGunBoat"
         Me.rBtnGunBoat.Size = New System.Drawing.Size(96, 24)
-        Me.rBtnGunBoat.TabIndex = 5
+        Me.rBtnGunBoat.TabIndex = 9999
         Me.rBtnGunBoat.Text = "Gun Boat"
         Me.rBtnGunBoat.UseVisualStyleBackColor = True
         '
@@ -194,7 +194,7 @@ Partial Class FrmArtyCalculator
         Me.rBtnTank.Location = New System.Drawing.Point(6, 139)
         Me.rBtnTank.Name = "rBtnTank"
         Me.rBtnTank.Size = New System.Drawing.Size(62, 24)
-        Me.rBtnTank.TabIndex = 5
+        Me.rBtnTank.TabIndex = 9999
         Me.rBtnTank.Text = "Tank"
         Me.rBtnTank.UseVisualStyleBackColor = True
         '
@@ -312,7 +312,8 @@ Partial Class FrmArtyCalculator
         Me.dgvSaves.Location = New System.Drawing.Point(565, 66)
         Me.dgvSaves.Name = "dgvSaves"
         Me.dgvSaves.Size = New System.Drawing.Size(323, 193)
-        Me.dgvSaves.TabIndex = 10000
+        Me.dgvSaves.TabIndex = 9999
+        Me.dgvSaves.TabStop = False
         '
         'btnSave
         '
@@ -320,7 +321,7 @@ Partial Class FrmArtyCalculator
         Me.btnSave.Location = New System.Drawing.Point(567, 268)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(75, 23)
-        Me.btnSave.TabIndex = 10001
+        Me.btnSave.TabIndex = 6
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
@@ -330,7 +331,7 @@ Partial Class FrmArtyCalculator
         Me.BtnDisplay.Location = New System.Drawing.Point(648, 268)
         Me.BtnDisplay.Name = "BtnDisplay"
         Me.BtnDisplay.Size = New System.Drawing.Size(75, 23)
-        Me.BtnDisplay.TabIndex = 10002
+        Me.BtnDisplay.TabIndex = 7
         Me.BtnDisplay.Text = "Display"
         Me.BtnDisplay.UseVisualStyleBackColor = True
         '
@@ -340,7 +341,7 @@ Partial Class FrmArtyCalculator
         Me.btnUpdate.Location = New System.Drawing.Point(729, 268)
         Me.btnUpdate.Name = "btnUpdate"
         Me.btnUpdate.Size = New System.Drawing.Size(75, 23)
-        Me.btnUpdate.TabIndex = 10002
+        Me.btnUpdate.TabIndex = 8
         Me.btnUpdate.Text = "Update"
         Me.btnUpdate.UseVisualStyleBackColor = True
         '
@@ -350,53 +351,49 @@ Partial Class FrmArtyCalculator
         Me.BtnDelete.Location = New System.Drawing.Point(810, 268)
         Me.BtnDelete.Name = "BtnDelete"
         Me.BtnDelete.Size = New System.Drawing.Size(75, 23)
-        Me.BtnDelete.TabIndex = 10002
+        Me.BtnDelete.TabIndex = 9
         Me.BtnDelete.Text = "Delete"
         Me.BtnDelete.UseVisualStyleBackColor = True
-        '
-        'txtDistance
-        '
-        Me.txtDistance.Enabled = False
-        Me.txtDistance.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDistance.Location = New System.Drawing.Point(158, 292)
-        Me.txtDistance.Name = "txtDistance"
-        Me.txtDistance.ReadOnly = True
-        Me.txtDistance.Size = New System.Drawing.Size(194, 26)
-        Me.txtDistance.TabIndex = 3
-        Me.txtDistance.TabStop = False
-        Me.txtDistance.Visible = False
-        '
-        'txtAzimuth
-        '
-        Me.txtAzimuth.Enabled = False
-        Me.txtAzimuth.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAzimuth.Location = New System.Drawing.Point(358, 292)
-        Me.txtAzimuth.Name = "txtAzimuth"
-        Me.txtAzimuth.ReadOnly = True
-        Me.txtAzimuth.Size = New System.Drawing.Size(194, 26)
-        Me.txtAzimuth.TabIndex = 3
-        Me.txtAzimuth.TabStop = False
-        Me.txtAzimuth.Visible = False
         '
         'lblTargetIndex
         '
         Me.lblTargetIndex.AutoSize = True
-        Me.lblTargetIndex.Location = New System.Drawing.Point(564, 305)
+        Me.lblTargetIndex.Location = New System.Drawing.Point(502, 302)
         Me.lblTargetIndex.Name = "lblTargetIndex"
-        Me.lblTargetIndex.Size = New System.Drawing.Size(101, 13)
-        Me.lblTargetIndex.TabIndex = 10003
-        Me.lblTargetIndex.Text = "TargetIndexNumber"
+        Me.lblTargetIndex.Size = New System.Drawing.Size(33, 13)
+        Me.lblTargetIndex.TabIndex = 9999
+        Me.lblTargetIndex.Text = "Index"
         Me.lblTargetIndex.Visible = False
         '
         'lblTargetName
         '
         Me.lblTargetName.AutoSize = True
-        Me.lblTargetName.Location = New System.Drawing.Point(671, 305)
+        Me.lblTargetName.Location = New System.Drawing.Point(670, 302)
         Me.lblTargetName.Name = "lblTargetName"
-        Me.lblTargetName.Size = New System.Drawing.Size(66, 13)
-        Me.lblTargetName.TabIndex = 10003
-        Me.lblTargetName.Text = "TargetName"
+        Me.lblTargetName.Size = New System.Drawing.Size(35, 13)
+        Me.lblTargetName.TabIndex = 9999
+        Me.lblTargetName.Text = "Name"
         Me.lblTargetName.Visible = False
+        '
+        'lblAzimuth
+        '
+        Me.lblAzimuth.AutoSize = True
+        Me.lblAzimuth.Location = New System.Drawing.Point(360, 302)
+        Me.lblAzimuth.Name = "lblAzimuth"
+        Me.lblAzimuth.Size = New System.Drawing.Size(44, 13)
+        Me.lblAzimuth.TabIndex = 9999
+        Me.lblAzimuth.Text = "Azimuth"
+        Me.lblAzimuth.Visible = False
+        '
+        'lblDistance
+        '
+        Me.lblDistance.AutoSize = True
+        Me.lblDistance.Location = New System.Drawing.Point(213, 302)
+        Me.lblDistance.Name = "lblDistance"
+        Me.lblDistance.Size = New System.Drawing.Size(49, 13)
+        Me.lblDistance.TabIndex = 9999
+        Me.lblDistance.Text = "Distance"
+        Me.lblDistance.Visible = False
         '
         'FrmArtyCalculator
         '
@@ -404,6 +401,8 @@ Partial Class FrmArtyCalculator
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(900, 389)
         Me.Controls.Add(Me.lblTargetName)
+        Me.Controls.Add(Me.lblDistance)
+        Me.Controls.Add(Me.lblAzimuth)
         Me.Controls.Add(Me.lblTargetIndex)
         Me.Controls.Add(Me.BtnDelete)
         Me.Controls.Add(Me.btnUpdate)
@@ -414,9 +413,7 @@ Partial Class FrmArtyCalculator
         Me.Controls.Add(Me.grpBoxArty)
         Me.Controls.Add(Me.btnCalculate)
         Me.Controls.Add(Me.txtOutput)
-        Me.Controls.Add(Me.txtAzimuth)
         Me.Controls.Add(Me.txtMaximum)
-        Me.Controls.Add(Me.txtDistance)
         Me.Controls.Add(Me.txtMinimum)
         Me.Controls.Add(Me.txtArtyAzimuth)
         Me.Controls.Add(Me.txtDistancetoArty)
@@ -469,8 +466,8 @@ Partial Class FrmArtyCalculator
     Friend WithEvents BtnDisplay As Button
     Friend WithEvents btnUpdate As Button
     Friend WithEvents BtnDelete As Button
-    Friend WithEvents txtDistance As TextBox
-    Friend WithEvents txtAzimuth As TextBox
     Friend WithEvents lblTargetIndex As Label
     Friend WithEvents lblTargetName As Label
+    Friend WithEvents lblAzimuth As Label
+    Friend WithEvents lblDistance As Label
 End Class
