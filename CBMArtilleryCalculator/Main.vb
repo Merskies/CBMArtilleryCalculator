@@ -137,10 +137,11 @@ Public Class FrmArtyCalculator
                 Dim sw As StreamWriter = IO.File.AppendText("Targets.txt")
                 sw.WriteLine(OutputLine)
                 sw.Close()
-                MessageBox.Show(Name & " added to file.", "Name Added")
+                MessageBox.Show(Name & " added to file.", "Target Added")
                 ClearTextBoxes()
-                txtDistancetoTarget.Focus()
+                Unlock()
                 Display()
+                txtDistancetoTarget.Focus()
             End If
         End If
         btnUpdate.Enabled = False
@@ -159,11 +160,12 @@ Public Class FrmArtyCalculator
         dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
         dgvSaves.RowHeadersVisible = False
         dgvSaves.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+        BtnDelete.Enabled = True
     End Sub
 
     Private Sub UpdateData() Handles btnUpdate.Click
         Dim SearchNumber As String
-        SearchNumber = InputBox("Please enter the Targets index number to update", "ID Search")
+        SearchNumber = InputBox("Please enter the Targets index number [#] to update", "Delete Target")
         Dim SearchQuery = From Search In TargetArray
                           Order By Search.Index Ascending
                           Let SearchID = Search.Index
@@ -188,6 +190,39 @@ Public Class FrmArtyCalculator
         Next
         File.WriteAllText(FileName, UpdatedData)
         MessageBox.Show("Target Added.", "Added")
+        ClearTextBoxes()
+        Unlock()
+        Display()
+    End Sub
+
+    Private Sub Delete() Handles BtnDelete.Click
+        Dim SearchNumber As String
+        SearchNumber = InputBox("Please enter the Targets index number to Delete", "Delete")
+        Dim SearchQuery = From Search In TargetArray
+                          Order By Search.Index Ascending
+                          Let SearchID = Search.Index
+                          Where SearchID = SearchNumber
+                          Select Search.Index, Search.TargetName, Search.Distance, Search.Azimuth
+        If (SearchQuery.Count <> 0) Then
+            Dim DBTarget = SearchQuery.First
+            lblTargetIndex.Text = DBTarget.Index
+        End If
+        Dim TargetID As String
+        TargetID = lblTargetIndex.Text
+        Dim UpdatedData As String = ""
+        For Each TG In TargetArray
+            If TargetID = TG.Index Then
+                TG.Index = ""
+                TG.TargetName = ""
+                TG.Distance = ""
+                TG.Azimuth = ""
+            End If
+            With TG
+                UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
+            End With
+        Next
+        File.WriteAllText(FileName, UpdatedData)
+        MessageBox.Show("Target Deleted", "Deleted")
         ClearTextBoxes()
         Display()
     End Sub
@@ -218,6 +253,14 @@ Public Class FrmArtyCalculator
         Next
     End Sub
 
+    Private Sub Unlock()
+        cbArtyAzimuth.Checked = False
+        cbDistancetoArty.Checked = False
+        cbDistancetoTarget.Checked = False
+        cbTargetAzimuth.Checked = False
+
+    End Sub
+
     Private Sub ClearTextBoxes() 'Clears all textboxes
         txtDistancetoTarget.Text = ""
         txtTargetAzimuth.Text = ""
@@ -225,4 +268,31 @@ Public Class FrmArtyCalculator
         txtArtyAzimuth.Text = ""
         txtOutput.Text = ""
     End Sub
+
+    Private Sub HighlightDT() Handles txtDistancetoTarget.Enter, txtDistancetoTarget.Click
+        If (Not String.IsNullOrEmpty(txtDistancetoTarget.Text)) Then
+            txtDistancetoTarget.SelectionStart = 0
+            txtDistancetoTarget.SelectionLength = txtDistancetoTarget.Text.Length
+        End If
+    End Sub
+    Private Sub HighlightTA() Handles txtTargetAzimuth.Enter, txtTargetAzimuth.Click
+        If (Not String.IsNullOrEmpty(txtTargetAzimuth.Text)) Then
+            txtTargetAzimuth.SelectionStart = 0
+            txtTargetAzimuth.SelectionLength = txtTargetAzimuth.Text.Length
+        End If
+    End Sub
+    Private Sub HighlightDA() Handles txtDistancetoArty.Enter, txtDistancetoArty.Click
+        If (Not String.IsNullOrEmpty(txtDistancetoArty.Text)) Then
+            txtDistancetoArty.SelectionStart = 0
+            txtDistancetoArty.SelectionLength = txtDistancetoArty.Text.Length
+        End If
+    End Sub
+    Private Sub HighlightAA() Handles txtArtyAzimuth.Enter, txtArtyAzimuth.Click
+        If (Not String.IsNullOrEmpty(txtArtyAzimuth.Text)) Then
+            txtArtyAzimuth.SelectionStart = 0
+            txtArtyAzimuth.SelectionLength = txtArtyAzimuth.Text.Length
+        End If
+    End Sub
 End Class
+
+
