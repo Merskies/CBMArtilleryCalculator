@@ -131,7 +131,7 @@ Public Class FrmArtyCalculator
             Else
                 IndexNumber = lineCount + 1
                 lblTargetIndex.Text = IndexNumber
-                Name = InputBox("Please give your target a name", "Name Your Target", "Name of Target")
+                Name = InputBox(Prompt:="Please give your target a name.", Title:="Name Your Target", DefaultResponse:="Name of Target")
                 Distance = lblDistance.Text
                 Azimuth = lblAzimuth.Text
 
@@ -141,6 +141,7 @@ Public Class FrmArtyCalculator
                 sw.WriteLine(OutputLine)
                 sw.Close()
                 MessageBox.Show(Name & " added to target list.", "Target Added")
+                btnSave.Enabled = False
                 ClearTextBoxes()
                 Unlock()
                 Display()
@@ -200,7 +201,7 @@ Public Class FrmArtyCalculator
 
     Private Sub Delete() Handles BtnDelete.Click
         Dim SearchNumber As String
-        SearchNumber = InputBox("Please enter the Targets index number to Delete", "Delete")
+        SearchNumber = InputBox(Prompt:="Please enter the Target's index number [#] to delete the target or type all to delete all targets.", Title:="Delete").ToUpper
         Dim SearchQuery = From Search In TargetArray
                           Order By Search.Index Ascending
                           Let SearchID = Search.Index
@@ -224,9 +225,15 @@ Public Class FrmArtyCalculator
                 UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
             End With
         Next
-        File.WriteAllText(FileName, UpdatedData)
-        MessageBox.Show("Target Deleted", "Deleted")
-        Display()
+        If SearchNumber = "ALL" Then
+            File.WriteAllText(FileName, "")
+            Display()
+            BtnDelete.Enabled = False
+        Else
+            File.WriteAllText(FileName, UpdatedData)
+            MessageBox.Show("Target Deleted", "Deleted")
+            Display()
+        End If
     End Sub
 
     Private Sub LoadForm(sender As Object, e As EventArgs) Handles Me.Load
