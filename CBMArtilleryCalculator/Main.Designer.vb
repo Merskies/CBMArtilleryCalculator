@@ -56,6 +56,7 @@ Partial Class FrmArtyCalculator
         Me.lblTargetName = New System.Windows.Forms.Label()
         Me.lblAzimuth = New System.Windows.Forms.Label()
         Me.lblDistance = New System.Windows.Forms.Label()
+        Me.btnClipboard = New System.Windows.Forms.Button()
         Me.grpBoxArty.SuspendLayout()
         Me.grpBoxLock.SuspendLayout()
         CType(Me.dgvSaves, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -225,7 +226,7 @@ Partial Class FrmArtyCalculator
         Me.txtOutput.Font = New System.Drawing.Font("Microsoft Sans Serif", 28.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtOutput.Location = New System.Drawing.Point(16, 324)
         Me.txtOutput.Name = "txtOutput"
-        Me.txtOutput.Size = New System.Drawing.Size(872, 50)
+        Me.txtOutput.Size = New System.Drawing.Size(788, 50)
         Me.txtOutput.TabIndex = 5
         Me.txtOutput.TabStop = False
         '
@@ -321,7 +322,8 @@ Partial Class FrmArtyCalculator
         Me.btnSave.Location = New System.Drawing.Point(567, 268)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(75, 23)
-        Me.btnSave.TabIndex = 6
+        Me.btnSave.TabIndex = 7
+        Me.btnSave.TabStop = False
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
@@ -331,7 +333,8 @@ Partial Class FrmArtyCalculator
         Me.BtnDisplay.Location = New System.Drawing.Point(648, 268)
         Me.BtnDisplay.Name = "BtnDisplay"
         Me.BtnDisplay.Size = New System.Drawing.Size(75, 23)
-        Me.BtnDisplay.TabIndex = 7
+        Me.BtnDisplay.TabIndex = 8
+        Me.BtnDisplay.TabStop = False
         Me.BtnDisplay.Text = "Display"
         Me.BtnDisplay.UseVisualStyleBackColor = True
         '
@@ -341,7 +344,8 @@ Partial Class FrmArtyCalculator
         Me.btnUpdate.Location = New System.Drawing.Point(729, 268)
         Me.btnUpdate.Name = "btnUpdate"
         Me.btnUpdate.Size = New System.Drawing.Size(75, 23)
-        Me.btnUpdate.TabIndex = 8
+        Me.btnUpdate.TabIndex = 9
+        Me.btnUpdate.TabStop = False
         Me.btnUpdate.Text = "Update"
         Me.btnUpdate.UseVisualStyleBackColor = True
         '
@@ -351,7 +355,8 @@ Partial Class FrmArtyCalculator
         Me.BtnDelete.Location = New System.Drawing.Point(810, 268)
         Me.BtnDelete.Name = "BtnDelete"
         Me.BtnDelete.Size = New System.Drawing.Size(75, 23)
-        Me.BtnDelete.TabIndex = 9
+        Me.BtnDelete.TabIndex = 10
+        Me.BtnDelete.TabStop = False
         Me.BtnDelete.Text = "Delete"
         Me.BtnDelete.UseVisualStyleBackColor = True
         '
@@ -395,11 +400,21 @@ Partial Class FrmArtyCalculator
         Me.lblDistance.Text = "Distance"
         Me.lblDistance.Visible = False
         '
+        'btnClipboard
+        '
+        Me.btnClipboard.Location = New System.Drawing.Point(810, 324)
+        Me.btnClipboard.Name = "btnClipboard"
+        Me.btnClipboard.Size = New System.Drawing.Size(75, 50)
+        Me.btnClipboard.TabIndex = 6
+        Me.btnClipboard.Text = "Copy to Clipboard"
+        Me.btnClipboard.UseVisualStyleBackColor = True
+        '
         'FrmArtyCalculator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(900, 389)
+        Me.Controls.Add(Me.btnClipboard)
         Me.Controls.Add(Me.lblTargetName)
         Me.Controls.Add(Me.lblDistance)
         Me.Controls.Add(Me.lblAzimuth)
@@ -470,4 +485,5 @@ Partial Class FrmArtyCalculator
     Friend WithEvents lblTargetName As Label
     Friend WithEvents lblAzimuth As Label
     Friend WithEvents lblDistance As Label
+    Friend WithEvents btnClipboard As Button
 End Class

@@ -39,9 +39,7 @@ Public Class FrmArtyCalculator
 
         Dim radio As RadioButton = TryCast(sender, RadioButton)
         If radio Is Nothing OrElse Not ArtilleryMap.ContainsKey(radio) Then Return
-
         Dim art As Artillery = ArtilleryMap(radio)
-
         Me.Min = art.MinRange
         Me.Max = art.MaxRange
         Me.NameofArty = art.Name
@@ -98,8 +96,13 @@ Public Class FrmArtyCalculator
                 FinalAzimuth = RawAzimuth
             End If
             'Variables for Output
-            OrderDistance = Math.Round(DistancefromArtytoTarget)
-            OrderAzimuth = FinalAzimuth
+            If rBtnHowitzer.Checked = True Then
+                OrderDistance = Math.Round(DistancefromArtytoTarget / 5) * 5
+                OrderAzimuth = FinalAzimuth
+            Else
+                OrderDistance = Math.Round(DistancefromArtytoTarget)
+                OrderAzimuth = FinalAzimuth
+            End If
             'Output
             lblDistance.Text = OrderDistance
             lblAzimuth.Text = OrderAzimuth
@@ -137,7 +140,7 @@ Public Class FrmArtyCalculator
                 Dim sw As StreamWriter = IO.File.AppendText("Targets.txt")
                 sw.WriteLine(OutputLine)
                 sw.Close()
-                MessageBox.Show(Name & " added to file.", "Target Added")
+                MessageBox.Show(Name & " added to target list.", "Target Added")
                 ClearTextBoxes()
                 Unlock()
                 Display()
@@ -165,7 +168,7 @@ Public Class FrmArtyCalculator
 
     Private Sub UpdateData() Handles btnUpdate.Click
         Dim SearchNumber As String
-        SearchNumber = InputBox("Please enter the Targets index number [#] to update", "Delete Target")
+        SearchNumber = InputBox("Please enter the Target's index number [#] to update", "Delete Target")
         Dim SearchQuery = From Search In TargetArray
                           Order By Search.Index Ascending
                           Let SearchID = Search.Index
@@ -223,7 +226,6 @@ Public Class FrmArtyCalculator
         Next
         File.WriteAllText(FileName, UpdatedData)
         MessageBox.Show("Target Deleted", "Deleted")
-        ClearTextBoxes()
         Display()
     End Sub
 
@@ -249,8 +251,11 @@ Public Class FrmArtyCalculator
             TargetArray(i).TargetName = Data(1)
             TargetArray(i).Distance = Data(2)
             TargetArray(i).Azimuth = Data(3)
-
         Next
+    End Sub
+
+    Private Sub Copy2Clipboard() Handles btnClipboard.Click
+        If txtOutput.TextLength > 0 Then Clipboard.SetText(txtOutput.Text)
     End Sub
 
     Private Sub Unlock()
@@ -258,7 +263,6 @@ Public Class FrmArtyCalculator
         cbDistancetoArty.Checked = False
         cbDistancetoTarget.Checked = False
         cbTargetAzimuth.Checked = False
-
     End Sub
 
     Private Sub ClearTextBoxes() 'Clears all textboxes
