@@ -111,7 +111,6 @@ Public Class FrmArtyCalculator
                 btnSave.Enabled = True
                 BtnDisplay.Enabled = True
                 btnUpdate.Enabled = True
-                Call Display()
             ElseIf (OrderDistance < Min) Then
                 txtOutput.Text = "Distance is " & Math.Abs(Min - OrderDistance) & "(M) too short for the " & NameofArty & "!"
             Else txtOutput.Text = "Distance is " & Math.Abs(Max - OrderDistance) & "(M) too far for the " & NameofArty & "!"
@@ -164,7 +163,13 @@ Public Class FrmArtyCalculator
         dgvSaves.Columns("Azimuth").HeaderText = "Azimuth"
         dgvSaves.RowHeadersVisible = False
         dgvSaves.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
-        BtnDelete.Enabled = True
+        Dim lineCount = File.ReadAllLines("Targets.txt").Length
+        If lineCount = 0 Then
+            MessageBox.Show("No targets to display, start by calculating a target and click save.", "No Targets in List")
+        Else
+
+            BtnDelete.Enabled = True
+        End If
     End Sub
 
     Private Sub UpdateData() Handles btnUpdate.Click
@@ -194,9 +199,10 @@ Public Class FrmArtyCalculator
         Next
         File.WriteAllText(FileName, UpdatedData)
         MessageBox.Show("Target Added.", "Added")
+        btnSave.Enabled = False
+        btnUpdate.Enabled = False
         ClearTextBoxes()
         Unlock()
-        Display()
     End Sub
 
     Private Sub Delete() Handles BtnDelete.Click
