@@ -2,6 +2,8 @@
 Public Class FrmArtyCalculator
     'Made by [CBM]Merskies
     '11/17/2017
+    'Updated
+    '1/05/2018
     Structure TargetData
         Dim Index As String
         Dim Distance As String
@@ -54,10 +56,11 @@ Public Class FrmArtyCalculator
         txtArtyAzimuth.Enabled = cbArtyAzimuth.Checked = False
     End Sub
 
-    Private Sub Calculate(sender As Object, e As EventArgs) Handles btnCalculate.Click
+    Private Sub Calculate(sender As Object, e As EventArgs) Handles btnCalculate.Click 'Handles the calculations
         Dim DistancetoTarget, TargetAzimuth, DistancetoArty, ArtyAzimuth As Double
         Dim AngleofSpotter, AngleofSpotterinRads, DistancefromArtytoTarget, SinofRads, DegreeofArtyinRads, DegreeofArtyinDegrees, RoundedDegree, RawAzimuth, FinalAzimuth As Double
         Dim OrderDistance, OrderAzimuth As Double
+        Dim lineCount = File.ReadAllLines("Targets.txt").Length
         'Input
         Try
             DistancetoTarget = txtDistancetoTarget.Text
@@ -109,8 +112,9 @@ Public Class FrmArtyCalculator
             If (OrderDistance >= Min And OrderDistance <= Max) Then
                 txtOutput.Text = "Order Distance " & OrderDistance & ", Azimuth " & OrderAzimuth
                 btnSave.Enabled = True
-                BtnDisplay.Enabled = True
-                btnUpdate.Enabled = True
+                If lineCount <> 0 Then
+                    btnUpdate.Enabled = True
+                End If
             ElseIf (OrderDistance < Min) Then
                 txtOutput.Text = "Distance is " & Math.Abs(Min - OrderDistance) & "(M) too short for the " & NameofArty & "!"
             Else txtOutput.Text = "Distance is " & Math.Abs(Max - OrderDistance) & "(M) too far for the " & NameofArty & "!"
@@ -120,9 +124,9 @@ Public Class FrmArtyCalculator
         End Try
     End Sub
 
-    Private Sub Save() Handles btnSave.Click
+    Private Sub Save() Handles btnSave.Click 'Handles the save button
         If txtOutput.Text = "" Or txtOutput.Text = "Not Enough Data!" Then
-            MsgBox("You have not yet calculated your order to save!")
+            MsgBox("You have not yet calculated your target to save!")
         Else
             Dim lineCount = File.ReadAllLines("Targets.txt").Length
             Dim IndexNumber, Name, Distance, Azimuth, OutputLine As String
@@ -150,7 +154,7 @@ Public Class FrmArtyCalculator
         btnUpdate.Enabled = False
     End Sub
 
-    Private Sub Display() Handles BtnDisplay.Click
+    Private Sub Display() Handles BtnDisplay.Click 'Handles the display button
         LoadTargets()
         Dim TargetQuery = From Target In TargetArray
                           Where Target.Index <> ""
@@ -172,9 +176,9 @@ Public Class FrmArtyCalculator
         End If
     End Sub
 
-    Private Sub UpdateData() Handles btnUpdate.Click
+    Private Sub UpdateData() Handles btnUpdate.Click 'Handles the update button
         Dim SearchNumber As String
-        SearchNumber = InputBox("Please enter the Target's index number [#] to update", "Delete Target")
+        SearchNumber = InputBox("Please enter the target's index number [#] to update", "Delete Target")
         Dim SearchQuery = From Search In TargetArray
                           Order By Search.Index Ascending
                           Let SearchID = Search.Index
@@ -189,23 +193,23 @@ Public Class FrmArtyCalculator
         Dim UpdatedData As String = ""
         For Each TG In TargetArray
             If TargetID = TG.Index Then
-                TG.TargetName = InputBox("Updated Target Name", "Target Name", lblTargetName.Text)
-                TG.Distance = InputBox("Updated Distance", "Distance", lblDistance.Text)
-                TG.Azimuth = InputBox("Updated Azimuth", "Azimuth", lblAzimuth.Text)
+                TG.TargetName = InputBox(Prompt:="Updated Target Name", Title:="Target Name", DefaultResponse:=lblTargetName.Text)
+                TG.Distance = InputBox(Prompt:="Updated Distance", Title:="Distance", DefaultResponse:=lblDistance.Text)
+                TG.Azimuth = InputBox(Prompt:="Updated Azimuth", Title:="Azimuth", DefaultResponse:=lblAzimuth.Text)
             End If
             With TG
                 UpdatedData &= $"{ .Index},{ .TargetName},{ .Distance},{ .Azimuth}" & vbCrLf
             End With
         Next
         File.WriteAllText(FileName, UpdatedData)
-        MessageBox.Show("Target Added.", "Added")
+        MessageBox.Show(text:="Target Added.", caption:="Added")
         btnSave.Enabled = False
         btnUpdate.Enabled = False
         ClearTextBoxes()
         Unlock()
     End Sub
 
-    Private Sub Delete() Handles BtnDelete.Click
+    Private Sub Delete() Handles BtnDelete.Click 'Handles the Delte button
         Dim SearchNumber As String
         SearchNumber = InputBox(Prompt:="Please enter the Target's index number [#] to delete the target or type all to delete all targets.", Title:="Delete").ToUpper
         Dim SearchQuery = From Search In TargetArray
@@ -233,16 +237,16 @@ Public Class FrmArtyCalculator
         Next
         If SearchNumber = "ALL" Then
             File.WriteAllText(FileName, "")
-            Display()
             BtnDelete.Enabled = False
+            MessageBox.Show("All targets deleted", "Deleted")
         Else
             File.WriteAllText(FileName, UpdatedData)
-            MessageBox.Show("Target Deleted", "Deleted")
+            MessageBox.Show(text:="Target deleted", caption:="Deleted")
             Display()
         End If
     End Sub
 
-    Private Sub LoadForm(sender As Object, e As EventArgs) Handles Me.Load
+    Private Sub LoadForm(sender As Object, e As EventArgs) Handles Me.Load 'Loads File
         If (File.Exists(FileName)) Then
             LoadTargets()
         Else
@@ -252,7 +256,7 @@ Public Class FrmArtyCalculator
         BtnDisplay.Enabled = True
     End Sub
 
-    Private Sub LoadTargets()
+    Private Sub LoadTargets() 'Loads targets from txt into array.
         Dim Line As String
         Dim Data(2) As String
         Dim Target() As String = File.ReadAllLines("Targets.txt")
@@ -267,11 +271,11 @@ Public Class FrmArtyCalculator
         Next
     End Sub
 
-    Private Sub Copy2Clipboard() Handles btnClipboard.Click
+    Private Sub Copy2Clipboard() Handles btnClipboard.Click 'Copies the output to the clipboard
         If txtOutput.TextLength > 0 Then Clipboard.SetText(txtOutput.Text)
     End Sub
 
-    Private Sub Unlock()
+    Private Sub Unlock() 'Unchecks all the checkboxes
         cbArtyAzimuth.Checked = False
         cbDistancetoArty.Checked = False
         cbDistancetoTarget.Checked = False
